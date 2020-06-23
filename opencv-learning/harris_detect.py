@@ -1,21 +1,20 @@
 
-
 """
 harris 角点检测
 从图像中检测属于 角点 的点信息
 """
 
-import cv2 as  cv
+import cv2 as cv
 from matplotlib import pyplot as plt
 import numpy as np
 
 
-# detector parameters
-block_size = 3
-sobel_size = 3
-k = 0.06
+# 检测器参数
+block_size = 3  # 窗口尺寸大小
+sobel_size = 3  # sobel算子尺寸大小
+k = 0.06  # 用于计算相应角点R函数的k参数
 
-image = cv.imread('data/test_pic1.png')
+image = cv.imread('data/fangzi_pic.png')
 
 print(image.shape)
 height = image.shape[0]
@@ -28,16 +27,15 @@ gray_img = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
 # modify the data type setting to 32-bit floating point
 gray_img = np.float32(gray_img)
 
-# detect the corners with appropriate values as input parameters
+# 检测角点
 corners_img = cv.cornerHarris(gray_img, block_size, sobel_size, k)
 
-# result is dilated for marking the corners, not necessary
+# 膨胀处理，利于更方便的观察角点形态
 kernel = cv.getStructuringElement(cv.MORPH_RECT, (3, 3))
 dst = cv.dilate(corners_img, kernel)
 
-# Threshold for an optimal value, marking the corners in Green
-# image[corners_img>0.01*corners_img.max()] = [0,0,255]
 
+# 晒出那些不合适的角点，pix大于一定阈值的认为是需要留下的角点
 for r in range(height):
     for c in range(width):
         pix = dst[r, c]
@@ -48,3 +46,5 @@ for r in range(height):
 image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
 plt.imshow(image)
 plt.show()
+
+cv.imwrite('data/fangzi_pic_harris_res.jpg', image)
