@@ -8,8 +8,6 @@ import cv2 as cv
 
 # 读取原始图像
 img = cv.imread('data/dahuaxiyou.jpg')
-# img = cv.imread('data/zixiaxianzi.jpg')
-# img = cv.imread('data/zhuzhu.jpg')
 
 # 训练好的LBP，人脸检测模型
 face_detect = cv.CascadeClassifier("lbpcascade_frontalface_improved.xml")
